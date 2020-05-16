@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-
+var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema
 
 var adminSchema = new Schema({
@@ -33,7 +33,7 @@ var adminSchema = new Schema({
     unique: true
   }
 })
-
+adminSchema.plugin(uniqueValidator)
 var Admin = mongoose.model('admin', adminSchema)
 
 module.exports = Admin

@@ -1,11 +1,13 @@
 var mongoose = require('mongoose')
+var uniqueValidator = require('mongoose-unique-validator')
 
 var { Schema } = mongoose
 
 var clientSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   phone: {
     type: String,
@@ -18,6 +20,7 @@ var clientSchema = new Schema({
   }
 })
 
+clientSchema.plugin(uniqueValidator)
 var Client = mongoose.model('client', clientSchema)
 
 module.exports = Client

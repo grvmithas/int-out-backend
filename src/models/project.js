@@ -20,8 +20,8 @@ var projectSchema = new Schema({
     ref: 'projectType',
     required: true,
   },
-  Budget: {
-    type: number,
+  budget: {
+    type: Number,
   },
   client: {
     type: Schema.Types.ObjectId,

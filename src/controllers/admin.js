@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
-
+var jwt = require('jsonwebtoken')
 var Admin = require('../models/admin')
 
 function createAdmin(fields) {
@@ -54,8 +54,41 @@ function updateAdmin(req) {
   }
 }
 
+function signIn(admin, password) {
+  return bcrypt.compare(password, admin.password).then((response) => {
+    if (!response) {
+      return ({ status: 401 })
+    } let jwtToken = jwt.sign({
+      email: admin.email,
+      _id: admin._id
+    }, process.env.SECRET_KEY, {
+        expiresIn: "1d"
+      });
+    return ({
+      token: jwtToken,
+      expiresIn: 3600,
+      admin: admin,
+      status: 200,
+    })
+  }).catch(() => {
+    return {
+      status: 401,
+    }
+  })
+}
+
+async function deleteAdmin(id) {
+  try {
+    return await Admin.findByIdAndDelete(id)
+  }
+  catch (err) {
+    return err
+  }
+}
 module.exports = {
   createAdmin,
   getAdmins,
-  updateAdmin
+  updateAdmin,
+  signIn,
+  deleteAdmin
 }
